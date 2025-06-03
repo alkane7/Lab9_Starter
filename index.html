@@ -87,21 +87,149 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "b40fb2ee5dd348328aa201bb48921258"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+  <script>
+    TrackJS.track('Testing TrackJS!');
     let form = document.querySelector('form');
+    class InputTypeError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "InputTypeError";
+      }
+    }
+
     form.addEventListener('submit', e => {
       e.preventDefault();
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      try {
+        if (isNaN(firstNum) || isNaN(secondNum)) {
+          throw new InputTypeError("Inputs must be numeric values.");
+        }
+        if (!['+', '-', '*', '/'].includes(operator)) {
+          throw new Error("Invalid operator selected.");
+        }
+
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (err) {
+        console.error(`Caught ${err.name}: ${err.message}`);
+        output.innerHTML = `Error: ${err.message}`;
+      } finally {
+        console.log("Calculation attempted.");
+      }
     });
+
+
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
     // Start your code here
     // You may move this JS to another file if you wish
+    // Console Log
+    errorBtns[0].addEventListener('click', () => {
+      console.log('This is a console log message');
+    });
+
+    // Console Error
+    errorBtns[1].addEventListener('click', () => {
+      console.error('This is a console error message');
+    });
+
+    // Console Count
+    errorBtns[2].addEventListener('click', () => {
+      console.count('Count button clicked');
+    });
+
+    // Console Warn
+    errorBtns[3].addEventListener('click', () => {
+      console.warn('This is a console warning message');
+    });
+
+    // Console Assert
+    errorBtns[4].addEventListener('click', () => {
+      console.assert(false, 'Assertion failed: condition is false');
+    });
+
+    // Console Clear
+    errorBtns[5].addEventListener('click', () => {
+      console.clear();
+    });
+
+    // Console Dir
+    errorBtns[6].addEventListener('click', () => {
+      console.dir(document.body);
+    });
+
+    // Console dirxml
+    errorBtns[7].addEventListener('click', () => {
+      console.dirxml(document);
+    });
+
+    // Console Group Start
+    errorBtns[8].addEventListener('click', () => {
+      console.group('Console Group Example');
+      console.log('Inside group 1');
+      console.log('Inside group 2');
+    });
+
+    // Console Group End
+    errorBtns[9].addEventListener('click', () => {
+      console.groupEnd();
+    });
+
+    // Console Table
+    errorBtns[10].addEventListener('click', () => {
+      const data = [
+        { name: 'Alice', age: 21 },
+        { name: 'Bob', age: 25 },
+      ];
+      console.table(data);
+    });
+
+    // Start Timer
+    errorBtns[11].addEventListener('click', () => {
+      console.time('Timer');
+    });
+
+    // End Timer
+    errorBtns[12].addEventListener('click', () => {
+      console.timeEnd('Timer');
+    });
+
+    // Console Trace
+    errorBtns[13].addEventListener('click', () => {
+      function a() {
+        b();
+      }
+      function b() {
+        console.trace('Trace Example');
+      }
+      a();
+    });
+
+    // Trigger a Global Error
+    errorBtns[14].addEventListener('click', () => {
+      throw new Error('This is a global error!');
+    });
+
+    window.onerror = function (message, source, lineno, colno, error) {
+      console.log('Global Error Caught!');
+      console.log(`Message: ${message}`);
+      console.log(`Source: ${source}`);
+      console.log(`Line: ${lineno}, Column: ${colno}`);
+      console.log(`Error object: ${error}`);
+    };
+
+
   </script>
 </body>
 
