@@ -115,8 +115,8 @@
         if (isNaN(firstNum) || isNaN(secondNum)) {
           throw new InputTypeError("Inputs must be numeric values.");
         }
-        if (!['+', '-', '*', '/'].includes(operator)) {
-          throw new Error("Invalid operator selected.");
+        if (operator === '/' && Number(secondNum) === 0) {
+          throw new InputTypeError("Cannot divide by zero.");
         }
 
         output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
